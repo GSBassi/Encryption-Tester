@@ -1,0 +1,76 @@
+﻿<Window x:Class="EncryptionTester.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Encryption Test" Height="450" Width="525">
+    <Window.Resources>
+        <ResourceDictionary>
+            <LinearGradientBrush x:Key="bkrndBrush" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="White" Offset="0"></GradientStop>
+                <GradientStop Color="WhiteSmoke" Offset=".5"></GradientStop>
+                <GradientStop Color="AntiqueWhite" Offset="1"></GradientStop>
+            </LinearGradientBrush>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Background="{StaticResource bkrndBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height=".5*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height=".5*" />
+        </Grid.RowDefinitions>
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height=".5*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height=".5*" />
+            </Grid.RowDefinitions>
+            <Label>Symmetric Encryption</Label>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width=".5*" />
+                </Grid.ColumnDefinitions>
+                <Label>Convert Text Using:</Label>
+                <ComboBox Name="cmbSym" Grid.Column="1" ItemsSource="{Binding }"></ComboBox>
+            </Grid>
+            <Label Grid.Row="2">Input Text:</Label>
+            <TextBox Grid.Row="3" Name="symInput"></TextBox>
+            <Button Name="btnConvertsym" Grid.Row="4" Click="btnConvertsym_Click">Convert</Button>
+            <Label Grid.Row="5">Output Text:</Label>
+            <TextBox Grid.Row="6" Name="symOutput" IsReadOnly="True"></TextBox>
+        </Grid>
+        <Grid Height="1" Grid.Row="1" Background="Black"></Grid>
+        <Grid Grid.Row="2" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height=".5*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height=".5*" />
+            </Grid.RowDefinitions>
+            <Label>Asymmetric Encryption</Label>
+            <Grid  Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width=".5*" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width=".5*" />
+                </Grid.ColumnDefinitions>
+                <Label>Convert Text Using:</Label>
+                <ComboBox Name="cmbAsym" Grid.Column="1" ItemsSource="{Binding }"></ComboBox>
+                <Label Grid.Column="2">Encryption Password:</Label>
+                <TextBox Name="txtPass" Grid.Column="3">test password</TextBox>
+            </Grid>
+            <Label Grid.Row="2">Input Text:</Label>
+            <TextBox Grid.Row="3" Name="asymInput"></TextBox>
+            <Button Name="btnConvertAsym" Grid.Row="4" Click="btnConvertAsym_Click">Convert</Button>
+            <Label Grid.Row="5">Output Text:</Label>
+            <TextBox Grid.Row="6" Name="asymOutput" IsReadOnly="True"></TextBox>
+        </Grid>
+    </Grid>
+</Window>
