@@ -48,6 +48,12 @@ namespace EncryptionTester
         public static string Encrypt(string uncoded, string password, SymType encryptType)
         {
             byte[] plainTextByteArray = System.Text.Encoding.Unicode.GetBytes(uncoded);
+
+            return Convert.ToBase64String(Encrypt(plainTextByteArray, password, encryptType));
+        }
+
+        public static byte[] Encrypt(byte[] plainTextByteArray, string password, SymType encryptType)
+        {
             byte[] theOutput = null;
 
             using (ICryptoTransform enCryp = GetCryptProvider(password, encryptType).CreateEncryptor())
@@ -63,13 +69,13 @@ namespace EncryptionTester
                 }
             }
 
-            return Convert.ToBase64String(theOutput);
+            return theOutput;
         }
 
         private static SymmetricAlgorithm GetCryptProvider(string thePassword, SymType encryptType)
         {
             //Dim theAlgo As RijndaelManaged = New RijndaelManaged            
-            SymmetricAlgorithm theAlgo = null ;
+            SymmetricAlgorithm theAlgo = null;
             switch (encryptType)
             {
                 case SymType.TripleDES:
@@ -147,12 +153,16 @@ namespace EncryptionTester
         {
             // If salt is not specified, generate it on the fly.
             byte[] plainTextBytes = null;
-            HashAlgorithm hash = null;
-            byte[] hashBytes = null;
-            string hashValue = null;
-
             // Convert plain text into a byte array.
             plainTextBytes = System.Text.Encoding.Unicode.GetBytes(plainText);
+            // Convert result into a base64-encoded string.
+            return Convert.ToBase64String(ComputeHash(plainTextBytes, theHashAlgorithm));
+        }
+
+        internal static byte[] ComputeHash(byte[] plainTextBytes, HashType theHashAlgorithm)
+        {
+            HashAlgorithm hash = null;
+            byte[] hashBytes = null;
             try
             {
                 // Initialize appropriate hashing algorithm class.
@@ -181,9 +191,6 @@ namespace EncryptionTester
 
                 // Compute hash value of our plain text with appended salt.
                 hashBytes = hash.ComputeHash(plainTextBytes);
-
-                // Convert result into a base64-encoded string.
-                hashValue = Convert.ToBase64String(hashBytes);
             }
             finally
             {
@@ -192,10 +199,41 @@ namespace EncryptionTester
                     hash.Dispose();
                 }
             }
-            // Return the result.
-            return hashValue;
+            return hashBytes;
         }
+
         #endregion
+
+
+        public static byte[] ConvertFileToBytes(string theFilePath)
+        {
+            byte[] theBytes = null;
+            if (System.IO.File.Exists(theFilePath))
+            {
+                using (System.IO.FileStream fs = new System.IO.FileStream(theFilePath, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read))
+                {
+                    using (System.IO.BinaryReader br = new System.IO.BinaryReader(fs))
+                    {
+                        System.IO.FileInfo fInfo = new System.IO.FileInfo(theFilePath);
+                        theBytes = br.ReadBytes(Convert.ToInt32(fInfo.Length));
+                    }
+                }
+            }
+            return theBytes;
+        }
+
+        public static void ConvertBytesToFile(byte[] theBytes, string theFilePath)
+        {
+            string theDir = System.IO.Path.GetDirectoryName(theFilePath);
+            //in case the folder doesn't exist
+            using (System.IO.FileStream fs = new System.IO.FileStream(theFilePath, FileMode.Create, FileAccess.Write, FileShare.Write))
+            {
+                using (System.IO.BinaryWriter bw = new System.IO.BinaryWriter(fs, System.Text.Encoding.Unicode))
+                {
+                    bw.Write(theBytes);
+                }
+            }
+        }
 
     }
 }
