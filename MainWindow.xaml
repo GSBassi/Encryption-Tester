@@ -27,14 +27,14 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition Height=".5*" />
             </Grid.RowDefinitions>
-            <Label>Symmetric Encryption</Label>
+            <Label>ASymmetric Encryption</Label>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width=".5*" />
                 </Grid.ColumnDefinitions>
                 <Label>Convert Text Using:</Label>
-                <ComboBox Name="cmbSym" Grid.Column="1" ItemsSource="{Binding }"></ComboBox>
+                <ComboBox Name="cmbASym" Grid.Column="1" ItemsSource="{Binding }"></ComboBox>
             </Grid>
             <Label Grid.Row="2">Input Text:</Label>
             <TextBox Grid.Row="3" Name="symInput"></TextBox>
@@ -53,7 +53,7 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition Height=".5*" />
             </Grid.RowDefinitions>
-            <Label>Asymmetric Encryption</Label>
+            <Label>Symmetric Encryption</Label>
             <Grid  Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
@@ -62,7 +62,7 @@
                     <ColumnDefinition Width=".5*" />
                 </Grid.ColumnDefinitions>
                 <Label>Convert Text Using:</Label>
-                <ComboBox Name="cmbAsym" Grid.Column="1" ItemsSource="{Binding }"></ComboBox>
+                <ComboBox Name="cmbSym" Grid.Column="1" ItemsSource="{Binding }"></ComboBox>
                 <Label Grid.Column="2">Encryption Password:</Label>
                 <TextBox Name="txtPass" Grid.Column="3">test password</TextBox>
             </Grid>

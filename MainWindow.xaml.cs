@@ -36,32 +36,14 @@ namespace EncryptionTester
             Mouse.OverrideCursor = Cursors.Wait;
             try
             {
-                cmbAsym.DataContext = SharedMethods.GetASymmetricTypes();
+                cmbASym.DataContext = SharedMethods.GetASymmetricTypes();
                 cmbSym.DataContext = SharedMethods.GetSymmetricTypes();
-                //If cmboInput Is Nothing Then Exit Sub
-                //If Not SelectedConversionType.HasValue Then Exit Sub
-                //grdNormalInput.Visibility = Windows.Visibility.Collapsed
-                //ctlGPS.Visibility = Windows.Visibility.Collapsed
-                //'Me.cmboInput.Items.Clear()
-                //Dim m_Convo As ConvertObject = ConversionLogic.ReturnConvoGroupType(SelectedConversionType)
-                //If m_Convo IsNot Nothing Then
-                //    grdNormalInput.Visibility = Windows.Visibility.Visible
-
-                //    Dim sStringCol As New Specialized.StringCollection
-                //    sStringCol = m_Convo.ConvertTypes
-                //    cmboInput.DataContext = sStringCol
-                //ElseIf SelectedConversionType = ConversionLogic.ConversionTypes.GPS Then
-                //    ctlGPS.Visibility = Windows.Visibility.Visible
-                //    ctlGPS.ClearValues()
-                //    txtInput.Text = String.Empty
-
-                //End If
-                cmbAsym.SelectedIndex = 0;
+                cmbASym.SelectedIndex = 0;
                 cmbSym.SelectedIndex = 0;
             }
             catch (Exception ex)
             {
-                //ExceptionHandler.HandleException(ex)
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
             }
             finally
             {
@@ -75,7 +57,7 @@ namespace EncryptionTester
             {
                 if (!string.IsNullOrEmpty(symInput.Text))
                 {
-                    SharedMethods.HashType hshTyp = (SharedMethods.HashType)Enum.Parse(typeof(SharedMethods.HashType), cmbSym.SelectedValue.ToString());
+                    SharedMethods.HashType hshTyp = (SharedMethods.HashType)Enum.Parse(typeof(SharedMethods.HashType), cmbASym.SelectedValue.ToString());
                     symOutput.Text = SharedMethods.ComputeHash(symInput.Text, hshTyp);
                 }
             }
@@ -91,7 +73,8 @@ namespace EncryptionTester
             {
                 if ((!string.IsNullOrEmpty(asymInput.Text)) && (!string.IsNullOrEmpty(txtPass.Text)))
                 {
-                    asymOutput.Text = SharedMethods.Encrypt(asymInput.Text, txtPass.Text);
+                    SharedMethods.SymType aTyp = (SharedMethods.SymType)Enum.Parse(typeof(SharedMethods.SymType), cmbSym.SelectedValue.ToString());
+                    asymOutput.Text = SharedMethods.Encrypt(asymInput.Text, txtPass.Text, aTyp);
                 }
             }
             catch (Exception ex)

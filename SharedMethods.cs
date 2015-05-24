@@ -12,17 +12,26 @@ namespace EncryptionTester
     internal class SharedMethods
     {
 
-        #region "Asymmetric"
+        #region "Symmetric"
 
-        internal enum AsymType
+        internal enum SymType
         {
-            TripleDES
+            RC2,
+            DES,
+            TripleDES,
+            RijndaelManaged
         }
 
-        internal static ReadOnlyCollection<string> GetASymmetricTypes()
+        internal static ReadOnlyCollection<string> GetSymmetricTypes()
         {
             List<string> theReturn = new List<string>();
-            foreach (AsymType s in Enum.GetValues(typeof(AsymType)))
+
+            //IEnumerable<Type> twitypes = System.Reflection.Assembly.GetAssembly(typeof(SymmetricAlgorithm)).GetTypes().Where(type => type.IsSubclassOf(typeof(SymmetricAlgorithm))).ToList();
+            //foreach (Type t in twitypes)
+            //{
+            //    theReturn.Add(t.Name);
+            //}
+            foreach (SymType s in Enum.GetValues(typeof(SymType)))
             {
                 theReturn.Add(s.ToString());
             }
@@ -36,12 +45,12 @@ namespace EncryptionTester
         /// <param name="password">the private key in string format</param>
         /// <returns>note that it takes unicode text, and coverts it's encryption to base64</returns>
         /// <remarks></remarks>
-        public static string Encrypt(string uncoded, string password)
+        public static string Encrypt(string uncoded, string password, SymType encryptType)
         {
             byte[] plainTextByteArray = System.Text.Encoding.Unicode.GetBytes(uncoded);
             byte[] theOutput = null;
 
-            using (ICryptoTransform enCryp = GetCryptProvider(password).CreateEncryptor())
+            using (ICryptoTransform enCryp = GetCryptProvider(password, encryptType).CreateEncryptor())
             {
                 using (MemoryStream ms = new MemoryStream())
                 {
@@ -57,20 +66,38 @@ namespace EncryptionTester
             return Convert.ToBase64String(theOutput);
         }
 
-        private static TripleDESCryptoServiceProvider GetCryptProvider(string thePassword)
+        private static SymmetricAlgorithm GetCryptProvider(string thePassword, SymType encryptType)
         {
             //Dim theAlgo As RijndaelManaged = New RijndaelManaged            
-            TripleDESCryptoServiceProvider theAlgo = new TripleDESCryptoServiceProvider();
-            byte[] salt1 = new byte[8];
-            using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
+            SymmetricAlgorithm theAlgo = null ;
+            switch (encryptType)
             {
-                // Fill the array with a random value.
-                rngCsp.GetBytes(salt1);
+                case SymType.TripleDES:
+                    theAlgo = new TripleDESCryptoServiceProvider();
+                    break;
+                case SymType.RijndaelManaged:
+                    theAlgo = new RijndaelManaged();
+                    break;
+                case SymType.RC2:
+                    theAlgo = new RC2CryptoServiceProvider();
+                    break;
+                case SymType.DES:
+                    theAlgo = new DESCryptoServiceProvider();
+                    break;
             }
-            using (Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(thePassword, salt1))
+            if (theAlgo != null)
             {
-                theAlgo.Key = key.GetBytes(Convert.ToInt32(theAlgo.KeySize / 8));
-                theAlgo.IV = key.GetBytes(Convert.ToInt32(theAlgo.BlockSize / 8));
+                byte[] salt1 = new byte[8];
+                using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
+                {
+                    // Fill the array with a random value.
+                    rngCsp.GetBytes(salt1);
+                }
+                using (Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(thePassword, salt1))
+                {
+                    theAlgo.Key = key.GetBytes(Convert.ToInt32(theAlgo.KeySize / 8));
+                    theAlgo.IV = key.GetBytes(Convert.ToInt32(theAlgo.BlockSize / 8));
+                }
             }
             return theAlgo;
         }
@@ -80,7 +107,7 @@ namespace EncryptionTester
         #endregion
 
 
-        #region "Symmetric"
+        #region "ASymmetric"
         internal enum HashType
         {
             SHA1,
@@ -90,9 +117,14 @@ namespace EncryptionTester
             SHA1Crypto
         }
 
-        internal static ReadOnlyCollection<string> GetSymmetricTypes()
+        internal static ReadOnlyCollection<string> GetASymmetricTypes()
         {
             List<string> theReturn = new List<string>();
+            //IEnumerable<Type> twitypes = System.Reflection.Assembly.GetAssembly(typeof(AsymmetricAlgorithm)).GetTypes().Where(type => type.IsSubclassOf(typeof(AsymmetricAlgorithm))).ToList();
+            //foreach (Type t in twitypes)
+            //{
+            //    theReturn.Add(t.Name);
+            //}
             foreach (HashType s in Enum.GetValues(typeof(HashType)))
             {
                 theReturn.Add(s.ToString());
