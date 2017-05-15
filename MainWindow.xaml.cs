@@ -77,20 +77,20 @@ namespace EncryptionTester
             try
             {
                 symOutput.Text = string.Empty;
-                asymInput.Text = string.Empty;
+                AsymInput.Text = string.Empty;
                 txtAsymFile.Text = string.Empty;
                 txtSymFile.Text = string.Empty;
                 if (rdText.IsChecked.Value)
                 {
                     symInput.Visibility = System.Windows.Visibility.Visible;
-                    asymInput.Visibility = System.Windows.Visibility.Visible;
+                    AsymInput.Visibility = System.Windows.Visibility.Visible;
                     stckAsym.Visibility = System.Windows.Visibility.Hidden;
                     stckSym.Visibility = System.Windows.Visibility.Hidden;
                 }
                 else
                 {
                     symInput.Visibility = System.Windows.Visibility.Hidden;
-                    asymInput.Visibility = System.Windows.Visibility.Hidden;
+                    AsymInput.Visibility = System.Windows.Visibility.Hidden;
                     stckAsym.Visibility = System.Windows.Visibility.Visible;
                     stckSym.Visibility = System.Windows.Visibility.Visible;
                 }
@@ -111,8 +111,8 @@ namespace EncryptionTester
             Mouse.OverrideCursor = Cursors.Wait;
             try
             {
-                cmbASym.DataContext = SharedMethods.GetASymmetricTypes();
-                cmbSym.DataContext = SharedMethods.GetSymmetricTypes();
+                cmbASym.DataContext = BusObj.Asym.AsymBase.GetASymmetricTypes();
+                cmbSym.DataContext = BusObj.Sym.SymBase.GetSymmetricTypes();
                 cmbASym.SelectedIndex = 0;
                 cmbSym.SelectedIndex = 0;
             }
@@ -126,50 +126,16 @@ namespace EncryptionTester
             }
         }
 
-        private void btnConvertsym_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                SharedMethods.HashType hshTyp = (SharedMethods.HashType)Enum.Parse(typeof(SharedMethods.HashType), cmbASym.SelectedValue.ToString());
-                if (rdText.IsChecked.Value)
-                {
-                    if (!string.IsNullOrEmpty(symInput.Text))
-                    {
-                        symOutput.Text = SharedMethods.ComputeHash(symInput.Text, hshTyp);
-                    }
-                }
-                else
-                {
-                    if (!string.IsNullOrEmpty(txtSymFile.Text))
-                    {
-                        string inputFile = txtSymFile.Text;
-                        string outputFile = System.IO.Path.ChangeExtension(inputFile, "chng");
-                        if (System.IO.File.Exists(inputFile))
-                        {
-                            byte[] b = SharedMethods.ConvertFileToBytes(inputFile);
-                            byte[] encryptedBytes = SharedMethods.ComputeHash(b, hshTyp);
-                            SharedMethods.ConvertBytesToFile(encryptedBytes, outputFile);
-                            symOutput.Text = outputFile;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleExeption(ex);
-            }
-        }
-
         private void btnConvertAsym_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                SharedMethods.SymType aTyp = (SharedMethods.SymType)Enum.Parse(typeof(SharedMethods.SymType), cmbSym.SelectedValue.ToString());
+                BusObj.Asym.AsymBase hshTyp = BusObj.Asym.AsymBase.GetInstance(cmbASym.SelectedValue.ToString());
                 if (rdText.IsChecked.Value)
                 {
-                    if ((!string.IsNullOrEmpty(asymInput.Text)) && (!string.IsNullOrEmpty(txtPass.Text)))
+                    if (!string.IsNullOrEmpty(AsymInput.Text))
                     {
-                        asymOutput.Text = SharedMethods.Encrypt(asymInput.Text, txtPass.Text, aTyp);
+                        asymOutput.Text = hshTyp.ComputeHash(AsymInput.Text);
                     }
                 }
                 else
@@ -180,10 +146,44 @@ namespace EncryptionTester
                         string outputFile = System.IO.Path.ChangeExtension(inputFile, "chng");
                         if (System.IO.File.Exists(inputFile))
                         {
-                            byte[] b = SharedMethods.ConvertFileToBytes(inputFile);
-                            byte[] encryptedBytes = SharedMethods.Encrypt(b, txtPass.Text, aTyp);
-                            SharedMethods.ConvertBytesToFile(encryptedBytes, outputFile);
+                            byte[] b = hshTyp.ConvertFileToBytes(inputFile);
+                            byte[] encryptedBytes = hshTyp.ComputeHash(b);
+                            hshTyp.ConvertBytesToFile(encryptedBytes, outputFile);
                             asymOutput.Text = outputFile;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleExeption(ex);
+            }
+        }
+
+        private void btnConvertSym_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                BusObj.Sym.SymBase symTyp = BusObj.Sym.SymBase.GetInstance(cmbSym.SelectedValue.ToString());
+                if (rdText.IsChecked.Value)
+                {
+                    if ((!string.IsNullOrEmpty(symInput.Text)) && (!string.IsNullOrEmpty(txtPass.Text)))
+                    {
+                        symOutput.Text = symTyp.Encrypt(symInput.Text, txtPass.Text);
+                    }
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(txtSymFile.Text))
+                    {
+                        string inputFile = txtSymFile.Text;
+                        string outputFile = System.IO.Path.ChangeExtension(inputFile, "chng");
+                        if (System.IO.File.Exists(inputFile))
+                        {
+                            byte[] b = symTyp.ConvertFileToBytes(inputFile);
+                            byte[] encryptedBytes = symTyp.Encrypt(b, txtPass.Text);
+                            symTyp.ConvertBytesToFile(encryptedBytes, outputFile);
+                            symOutput.Text = outputFile;
                         }
                     }
                 }

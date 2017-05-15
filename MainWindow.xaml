@@ -46,18 +46,18 @@
                 <ComboBox Name="cmbASym" Grid.Column="1" ItemsSource="{Binding }"></ComboBox>
             </Grid>
             <Label Grid.Row="2">Input:</Label>
-            <TextBox Grid.Row="3" Name="symInput"></TextBox>
-            <Grid Grid.Row="3" HorizontalAlignment="Stretch" Visibility="Hidden" Name="stckSym">
+            <TextBox Grid.Row="3" Name="AsymInput"></TextBox>
+            <Grid Grid.Row="3" HorizontalAlignment="Stretch" Visibility="Hidden" Name="stckAsym">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width=".5*" />
                 </Grid.ColumnDefinitions>
-                <Button Name="btnSymUp">Select File</Button>
-                <TextBox Grid.Column="1" IsReadOnly="True" Name="txtSymFile" HorizontalAlignment="Stretch"></TextBox>
+                <Button Name="btnAsymUp">Select File</Button>
+                <TextBox Grid.Column="1" IsReadOnly="True" Name="txtAsymFile" HorizontalAlignment="Stretch"></TextBox>
             </Grid>
-            <Button Name="btnConvertsym" Grid.Row="4" Click="btnConvertsym_Click">Convert</Button>
+            <Button Name="btnConvertAsym" Grid.Row="4" Click="btnConvertAsym_Click">Convert</Button>
             <Label Grid.Row="5">Output Text:</Label>
-            <TextBox Grid.Row="6" Name="symOutput" IsReadOnly="True"></TextBox>
+            <TextBox Grid.Row="6" Name="asymOutput" IsReadOnly="True"></TextBox>
         </Grid>
         <Grid Height="1" Grid.Row="2" Background="Black"></Grid>
         <Grid Grid.Row="3" Margin="10">
@@ -84,18 +84,18 @@
                 <TextBox Name="txtPass" Grid.Column="3">test password</TextBox>
             </Grid>
             <Label Grid.Row="2">Input:</Label>
-            <TextBox Grid.Row="3" Name="asymInput"></TextBox>
-            <Grid Grid.Row="3" HorizontalAlignment="Stretch" Visibility="Hidden" Name="stckAsym">
+            <TextBox Grid.Row="3" Name="symInput"></TextBox>
+            <Grid Grid.Row="3" HorizontalAlignment="Stretch" Visibility="Hidden" Name="stckSym">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width=".5*" />
                 </Grid.ColumnDefinitions>
-                <Button Name="btnAsymUp">Select File</Button>
-                <TextBox Grid.Column="1" IsReadOnly="True" Name="txtAsymFile"></TextBox>
+                <Button Name="btnSymUp">Select File</Button>
+                <TextBox Grid.Column="1" IsReadOnly="True" Name="txtSymFile"></TextBox>
             </Grid>
-            <Button Name="btnConvertAsym" Grid.Row="4" Click="btnConvertAsym_Click">Convert</Button>
+            <Button Name="btnConvertSym" Grid.Row="4" Click="btnConvertSym_Click">Convert</Button>
             <Label Grid.Row="5">Output Text:</Label>
-            <TextBox Grid.Row="6" Name="asymOutput" IsReadOnly="True"></TextBox>
+            <TextBox Grid.Row="6" Name="symOutput" IsReadOnly="True"></TextBox>
         </Grid>
     </Grid>
 </Window>

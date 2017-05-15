@@ -58,7 +58,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="SharedMethods.cs" />
+    <Compile Include="BusObj\Asym\AsymBase.cs" />
+    <Compile Include="BusObj\Asym\SHA1.cs" />
+    <Compile Include="BusObj\Asym\SHA1Crypto.cs" />
+    <Compile Include="BusObj\Asym\SHA256.cs" />
+    <Compile Include="BusObj\Asym\SHA384.cs" />
+    <Compile Include="BusObj\Asym\SHA512.cs" />
+    <Compile Include="BusObj\ConvBase.cs" />
+    <Compile Include="BusObj\Sym\DES.cs" />
+    <Compile Include="BusObj\Sym\RC2.cs" />
+    <Compile Include="BusObj\Sym\RijndaelManaged.cs" />
+    <Compile Include="BusObj\Sym\TripleDES.cs" />
+    <Compile Include="BusObj\Sym\SymBase.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -99,6 +110,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
